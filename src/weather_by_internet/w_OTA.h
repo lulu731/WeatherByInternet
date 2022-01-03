@@ -47,7 +47,3 @@ void otaUpdate() {
 }
 
 #endif
-
-/*void loop() {
-  ArduinoOTA.handle();
-}*/

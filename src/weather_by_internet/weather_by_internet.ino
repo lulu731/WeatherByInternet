@@ -4,6 +4,7 @@
 #include "host_data.h"
 #include <ArduinoJson.h>
 #include "json_ops.h"
+#include "w_OTA.h"
 
 
 WiFiClient wifiClient;
@@ -31,6 +32,8 @@ void setup() {
   Serial.println(WiFi.localIP());
   Serial.println();
 
+  otaUpdate();
+
   int err = client.get(url);
   delay(500);
 
@@ -54,4 +57,5 @@ void setup() {
 }
 
 void loop() {
+  ArduinoOTA.handle();
 }
