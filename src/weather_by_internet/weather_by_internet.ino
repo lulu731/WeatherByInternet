@@ -15,7 +15,7 @@ void setup() {
   while (!Serial) {
     ;
   }
-  /*Serial.println();
+  /*Serial.println("\r");
   Serial.println("------------");
   Serial.println("Serial OK");*/
 
@@ -48,6 +48,7 @@ void setup() {
     //Serial.println(error.f_str());
     return;
   }
+  Serial.println("readyJson");
   serializeJson(doc, Serial);
 }
 

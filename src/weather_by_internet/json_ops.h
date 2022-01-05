@@ -9,6 +9,7 @@ DeserializationError get_json_doc(JsonDocument& doc, Stream& stream) {
   filter["main"] = true;
   filter["visibility"] = true;
   filter["wind"] = true;
+  filter["name"] = true;
 
   // Deserialize the document
   
