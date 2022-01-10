@@ -9,6 +9,7 @@ byte getIconIndex(const char* ch) {
       return index; 
     }
   }
+  return 0;
 }
 
 #endif
