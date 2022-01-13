@@ -37,28 +37,35 @@ const char* pictures[] = {"01d", "02d", "03d", "04d", "09d", "10d", "11d", "13d"
 
 byte getIconIndex(const char* ch) {
   for (byte index = 0; index < 18; index++) {
-    if (strcmp(pictures[index], ch)== 0){
-      return index; 
+    if (strcmp(pictures[index], ch) == 0) {
+      return index;
     }
   }
   return 0;
 }
 
 void updateHmi(const StaticJsonDocument<1024>& doc) {
-  char str[6];
-    const char* icon = doc["weather"][0]["icon"];
-    weatherIcon.setPic(getIconIndex(icon));
-    city.setText(doc["name"]);
+  char str[10];
+  const char* icon = doc["weather"][0]["icon"];
+  weatherIcon.setPic(getIconIndex(icon));
+  city.setText(doc["name"]);
 
 
-    sprintf(str, "%d", (int)(doc["main"]["temp"]));
-    temp.setText(str);
-    sprintf(str, "%d", (int)(doc["main"]["feels_like"]));
-    feelTemp.setText(str);
-    sprintf(str, "%d", (int)(doc["main"]["pressure"]));
-    pressure.setText(str);
-    sprintf(str, "%d", (int)(doc["main"]["humidity"]));
-    humidity.setText(str);
+  sprintf(str, "%d", (int)(doc["main"]["temp"]));
+  strcat(str, " °C");
+  temp.setText(str);
+
+  sprintf(str, "%d", (int)(doc["main"]["feels_like"]));
+  strcat(str, " °C");
+  feelTemp.setText(str);
+
+  sprintf(str, "%d", (int)(doc["main"]["pressure"]));
+  strcat(str, " hPa");
+  pressure.setText(str);
+
+  sprintf(str, "%d", (int)(doc["main"]["humidity"]));
+  strcat(str, "%");
+  humidity.setText(str);
 }
 
 #endif
