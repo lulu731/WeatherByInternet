@@ -27,19 +27,19 @@ void updateHmi(const StaticJsonDocument<1024>& doc) {
   city.setText(doc["name"]);
 
 
-  sprintf(str, "%d", (int)(doc["main"]["temp"]));
+  sprintf(str, "%f%.1", (doc["main"]["temp"]).as<float>());
   strcat(str, " °C");
   temp.setText(str);
 
-  sprintf(str, "%d", (int)(doc["main"]["feels_like"]));
+  sprintf(str, "%f%.1", (doc["main"]["feels_like"]).as<float>());
   strcat(str, " °C");
   feelTemp.setText(str);
 
-  sprintf(str, "%d", (int)(doc["main"]["pressure"]));
+  sprintf(str, "%d", (doc["main"]["pressure"]).as<int>());
   strcat(str, " hPa");
   pressure.setText(str);
 
-  sprintf(str, "%d", (int)(doc["main"]["humidity"]));
+  sprintf(str, "%d", (doc["main"]["humidity"]).as<int>());
   strcat(str, "%");
   humidity.setText(str);
 }
