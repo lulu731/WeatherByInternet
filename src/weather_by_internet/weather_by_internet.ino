@@ -15,21 +15,12 @@ void setup() {
   while (!Serial) {
     ;
   }
-  /*Serial.println("\r");
-  Serial.println("------------");
-  Serial.println("Serial OK");*/
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     //Serial.print(".");
     delay(500);
   }
-
-  /*Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-  Serial.println();*/
 
   otaUpdate();
 
@@ -41,11 +32,11 @@ void setup() {
     int bodyLen = client.contentLength();
   }
 
-  StaticJsonDocument<1024> doc;
+  StaticJsonDocument<12288> doc;
   DeserializationError error = get_json_doc (doc, client);
-  if (error) {
-    //Serial.print(F("deserializeJson() failed: "));
-    //Serial.println(error.f_str());
+  if (error) { //todo: how to manage error?
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
     return;
   }
   Serial.println("readyJson");

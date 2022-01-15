@@ -5,6 +5,6 @@
 
 const char* host = "api.openweathermap.org";
 const int httpPort = 80;
-String url = "/data/2.5/weather?q=brest,fr&units=metric&appid=" + apiKey;
+String url = "/data/2.5/forecast?q=brest,fr&units=metric&appid=" + apiKey;
 
 #endif

@@ -1,4 +1,3 @@
-#include <Nextion.h>
 #include <ArduinoJson.h>
 #include "hmi_ops.h"
 
