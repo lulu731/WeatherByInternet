@@ -39,6 +39,8 @@ NexObject day2[] = { w_i2, temp2, press2, wind2, hum2 };
 NexObject day3[] = { w_i3, temp3, press3, wind3, hum3 };
 NexObject day4[] = { w_i4, temp4, press4, wind4, hum4 };
 
+NexObject days[][5] = {day0, day1, day2, day3, day4};
+
 const char* pictures[] = {"01d", "02d", "03d", "04d", "09d", "10d", "11d", "13d", "50d", "01n", "02n", "03n", "04n", "09n", "10n", "11n", "13n", "50n"};
 
 byte getIconIndex(const char* ch) {
@@ -50,26 +52,60 @@ byte getIconIndex(const char* ch) {
   return 0;
 }
 
-void updateHmi(const StaticJsonDocument<1024>& doc) {
-  char str[10];
-  const char* icon = doc["weather"][0]["icon"];
-  weatherIcon.setPic(getIconIndex(icon));
-  city.setText(doc["name"]);
-
-
-  sprintf(str, "%f%.1", (doc["main"]["temp"]).as<float>());
+char* strTemperature(char* str, float temp) {
+  sprintf(str, "%f%.1", temp);
   strcat(str, " °C");
-  temp.setText(str);
+  return str;
+}
 
-  sprintf(str, "%f%.1", (doc["main"]["feels_like"]).as<float>());
-  strcat(str, " °C");
-  feelTemp.setText(str);
-
-  sprintf(str, "%d", (doc["main"]["pressure"]).as<int>());
+char* strPressure(char* str, int pressure) {
+  sprintf(str, "%d", pressure);
   strcat(str, " hPa");
-  pressure.setText(str);
+  return str;
+}
 
-  sprintf(str, "%d", (doc["main"]["humidity"]).as<int>());
+char* strHumidity(char* str, int humidity) {
+  sprintf(str, "%d", humidity);
   strcat(str, "%");
-  humidity.setText(str);
+  return str;
+}
+
+char* strWind(char* str, int wind) {
+  sprintf(str, "%d", wind);
+  strcat(str, " nds");
+  return str;
+}
+
+
+void updateHmi(const DynamicJsonDocument& doc) {
+  city.setText(doc["city"]["name"]);
+  char str[10];
+
+  JsonArrayConst list = doc["list"];
+
+  byte day = 1;
+  for (JsonArrayConst::iterator it=list.begin(); it!=list.end(); ++it) {
+    if (it == list.begin()) {
+      const char* icon = (*it)["weather"][0]["icon"];
+      weatherIcon.setPic(getIconIndex(icon));
+      temp.setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
+      feelTemp.setText(strTemperature(str, ((*it)["main"]["feels_like"]).as<float>()));
+      pressure.setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
+      humidity.setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));      
+    }
+    else {
+      String dtTxt = (*it)["dt_txt"];
+      String dtEnd = "12:00:00";
+      if (dtTxt.endsWith(dtEnd) && day < 5) {
+        static_cast<NexPicture*>(&days[0][day])->setPic(getIconIndex((*it)["weather"][0]["icon"]));
+        static_cast<NexText*>(&days[1][day])->setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
+        static_cast<NexText*>(&days[2][day])->setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
+        static_cast<NexText*>(&days[3][day])->setText(strWind(str, ((*it)["wind"]["speed"]).as<int>()));
+        static_cast<NexText*>(&days[4][day])->setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));
+        ++day;
+      }
+    }
+  }
+  
+
 }

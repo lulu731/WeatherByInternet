@@ -21,12 +21,6 @@ DeserializationError get_json_doc(JsonDocument& doc, Stream& stream) {
   return deserializeJson(doc, stream, DeserializationOption::Filter(filter));
 }
 
-void clean_json_doc(JsonDocument& doc) {
-  if (doc["visibility"] > 4000) {
-    //todo
-  }
-}
-
 #endif
 
 

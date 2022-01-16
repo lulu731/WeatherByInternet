@@ -32,7 +32,7 @@ void setup() {
     int bodyLen = client.contentLength();
   }
 
-  StaticJsonDocument<12288> doc;
+  DynamicJsonDocument doc(12288);
   DeserializationError error = get_json_doc (doc, client);
   if (error) { //todo: how to manage error?
     Serial.print(F("deserializeJson() failed: "));

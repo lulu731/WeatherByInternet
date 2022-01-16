@@ -19,7 +19,7 @@ void loop() {
       foundReadyJson = true;
     }
   } else {
-    StaticJsonDocument<1024> doc;
+    DynamicJsonDocument doc(12288);
     DeserializationError error = deserializeJson(doc, Serial3);
 
     if (error) {
