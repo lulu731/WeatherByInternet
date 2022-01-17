@@ -97,11 +97,11 @@ void updateHmi(const DynamicJsonDocument& doc) {
       String dtTxt = (*it)["dt_txt"];
       String dtEnd = "12:00:00";
       if (dtTxt.endsWith(dtEnd) && day < 5) {
-        static_cast<NexPicture*>(&days[0][day])->setPic(getIconIndex((*it)["weather"][0]["icon"]));
-        static_cast<NexText*>(&days[1][day])->setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
-        static_cast<NexText*>(&days[2][day])->setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
-        static_cast<NexText*>(&days[3][day])->setText(strWind(str, ((*it)["wind"]["speed"]).as<int>()));
-        static_cast<NexText*>(&days[4][day])->setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));
+        static_cast<NexPicture*>(&(days[0][day]))->setPic(getIconIndex((*it)["weather"][0]["icon"]));
+        static_cast<NexText*>(&(days[1][day]))->setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
+        static_cast<NexText*>(&(days[2][day]))->setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
+        static_cast<NexText*>(&(days[3][day]))->setText(strWind(str, ((*it)["wind"]["speed"]).as<int>()));
+        static_cast<NexText*>(&(days[4][day]))->setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));
         ++day;
       }
     }
