@@ -19,16 +19,16 @@ void loop() {
       foundReadyJson = true;
     }
   } else {
-    DynamicJsonDocument doc(12288);
+    DynamicJsonDocument doc(4096);
     DeserializationError error = deserializeJson(doc, Serial3);
 
     if (error) {
-      //Serial.print(F("deserializeJson() failed: "));
-      //Serial.println(error.f_str());
+      Serial.print(F("deserializeJson() failed: "));
+      Serial.println(error.f_str());
       foundReadyJson = false;
       return;
     };
-
+    serializeJsonPretty(doc, Serial);
     updateHmi(doc);
 
     foundReadyJson = false;

@@ -5,15 +5,14 @@
 
 DeserializationError get_json_doc(JsonDocument& doc, Stream& stream) {
   StaticJsonDocument<512> filter;
-  //filter["list"]["weather"][0]["icon"] = true;
-  filter["main"]["temp"] = true;
-  filter["main"]["feels_like"] = true;
-  filter["main"]["pressure"] = true;
-  filter["main"]["humidity"] = true;
-  filter["weather"]["icon"] = true;
-  filter["visibility"] = true;
-  filter["wind"] = true;
-  filter["dt_txt"] = true;
+  filter["list"][0]["main"]["temp"] = true;
+  filter["list"][0]["main"]["feels_like"] = true;
+  filter["list"][0]["main"]["pressure"] = true;
+  filter["list"][0]["main"]["humidity"] = true;
+  filter["list"][0]["weather"][0]["icon"] = true;
+  filter["list"][0]["visibility"] = true;
+  filter["list"][0]["wind"] = true;
+  filter["list"][0]["dt_txt"] = true;
   filter["city"]["name"] = true;
 
   // Deserialize the document

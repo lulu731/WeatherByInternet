@@ -53,26 +53,23 @@ byte getIconIndex(const char* ch) {
 }
 
 char* strTemperature(char* str, float temp) {
-  sprintf(str, "%f%.1", temp);
-  strcat(str, " °C");
+  dtostrf(temp, 3, 1, str);
+  strcat(str, "C");
   return str;
 }
 
 char* strPressure(char* str, int pressure) {
-  sprintf(str, "%d", pressure);
-  strcat(str, " hPa");
+  sprintf(str, "%dhPa", pressure);
   return str;
 }
 
 char* strHumidity(char* str, int humidity) {
-  sprintf(str, "%d", humidity);
-  strcat(str, "%");
+  sprintf(str, "%d%%", humidity);
   return str;
 }
 
 char* strWind(char* str, int wind) {
-  sprintf(str, "%d", wind);
-  strcat(str, " nds");
+  sprintf(str, "%dnds", wind);
   return str;
 }
 
@@ -94,18 +91,14 @@ void updateHmi(const DynamicJsonDocument& doc) {
       humidity.setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));      
     }
     else {
-      String dtTxt = (*it)["dt_txt"];
-      String dtEnd = "12:00:00";
-      if (dtTxt.endsWith(dtEnd) && day < 5) {
-        static_cast<NexPicture*>(&(days[0][day]))->setPic(getIconIndex((*it)["weather"][0]["icon"]));
-        static_cast<NexText*>(&(days[1][day]))->setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
-        static_cast<NexText*>(&(days[2][day]))->setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
-        static_cast<NexText*>(&(days[3][day]))->setText(strWind(str, ((*it)["wind"]["speed"]).as<int>()));
-        static_cast<NexText*>(&(days[4][day]))->setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));
+      if (day < 5) {
+        static_cast<NexPicture*>(&(days[day][0]))->setPic(getIconIndex((*it)["weather"][0]["icon"]));
+        static_cast<NexText*>(&(days[day][1]))->setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
+        static_cast<NexText*>(&(days[day][2]))->setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
+        static_cast<NexText*>(&(days[day][3]))->setText(strWind(str, ((*it)["wind"]["speed"]).as<int>()));
+        static_cast<NexText*>(&(days[day][4]))->setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));
         ++day;
       }
     }
   }
-  
-
 }
