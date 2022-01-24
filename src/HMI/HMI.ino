@@ -28,7 +28,7 @@ void loop() {
       foundReadyJson = false;
       return;
     };
-    serializeJsonPretty(doc, Serial);
+    
     updateHmi(doc);
 
     foundReadyJson = false;
