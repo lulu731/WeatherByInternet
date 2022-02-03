@@ -3,8 +3,8 @@
 
 #include "secrets.h"
 
-const char* host = "api.openweathermap.org";
-const int httpPort = 80;
-String url = "/data/2.5/forecast?q=brest,fr&units=metric&appid=" + apiKey;
+static const char* host = "api.openweathermap.org";
+static const int httpPort = 80;
+static String url = "/data/2.5/forecast?q=brest,fr&units=metric&appid=" + apiKey;
 
 #endif

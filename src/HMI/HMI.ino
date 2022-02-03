@@ -1,5 +1,9 @@
 #include <ArduinoJson.h>
+#include <SerialCmd.h>
 #include "hmi_ops.h"
+
+
+SerialCmd serCmd(Serial3);
 
 void setup() {
   Serial.begin(115200);
@@ -10,27 +14,22 @@ void setup() {
   while (!Serial3) {
     ;
   }
-}
+  serCmd.AddCmd("PULLJS", SERIALCMD_FROMSERIAL, pullJson);
+};
 
-bool foundReadyJson = false;
+bool jsonToRequest = true;
 void loop() {
-  if (!foundReadyJson) {
-    if (Serial3.findUntil("readyJson\r\n", "\n")) {
-      foundReadyJson = true;
-    }
-  } else {
-    DynamicJsonDocument doc(4096);
-    DeserializationError error = deserializeJson(doc, Serial3);
-
-    if (error) {
-      Serial.print(F("deserializeJson() failed: "));
-      Serial.println(error.f_str());
-      foundReadyJson = false;
-      return;
-    };
-    
-    updateHmi(doc);
-
-    foundReadyJson = false;
+  if (jsonToRequest) {
+    Serial3.println("REQJSO");
+    jsonToRequest = false;
   }
-}
+  serCmd.ReadSer();
+
+  //update screen when JSON doc is updated
+  if (docUpdated) {
+    updateHmi(doc);
+    docUpdated = false;
+    jsonToRequest = true;
+    delay(120000);//delay for 2 min when updated
+  }  
+};

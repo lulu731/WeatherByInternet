@@ -50,11 +50,11 @@ byte getIconIndex(const char* ch) {
     }
   }
   return 0;
-}
+};
 
 char* strTemperature(char* str, float temp) {
   dtostrf(temp, 3, 1, str);
-  strcat(str, "C");
+  strcat(str, "°C");
   return str;
 }
 
@@ -81,14 +81,14 @@ void updateHmi(const DynamicJsonDocument& doc) {
   JsonArrayConst list = doc["list"];
 
   byte day = 1;
-  for (JsonArrayConst::iterator it=list.begin(); it!=list.end(); ++it) {
+  for (JsonArrayConst::iterator it = list.begin(); it != list.end(); ++it) {
     if (it == list.begin()) {
       const char* icon = (*it)["weather"][0]["icon"];
       weatherIcon.setPic(getIconIndex(icon));
       temp.setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
       feelTemp.setText(strTemperature(str, ((*it)["main"]["feels_like"]).as<float>()));
       pressure.setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
-      humidity.setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));      
+      humidity.setText(strHumidity(str, ((*it)["main"]["humidity"]).as<int>()));
     }
     else {
       if (day < 5) {
@@ -101,4 +101,17 @@ void updateHmi(const DynamicJsonDocument& doc) {
       }
     }
   }
+}
+
+void pullJson(void) {
+  doc.clear();
+  DeserializationError error = deserializeJson(doc, Serial3);
+
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
+  };
+  
+  docUpdated = true;
 }

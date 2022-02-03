@@ -1,24 +1,19 @@
 #ifndef __JSON_OPS_H__
 #define __JSON_OPS_H__
 
+#include <ArduinoHttpClient.h>
+#include <ESP8266WiFi.h>
+#include "host_data.h"
 #include <ArduinoJson.h>
 
-DeserializationError get_json_doc(JsonDocument& doc, Stream& stream) {
-  StaticJsonDocument<512> filter;
-  filter["list"][0]["main"]["temp"] = true;
-  filter["list"][0]["main"]["feels_like"] = true;
-  filter["list"][0]["main"]["pressure"] = true;
-  filter["list"][0]["main"]["humidity"] = true;
-  filter["list"][0]["weather"][0]["icon"] = true;
-  filter["list"][0]["visibility"] = true;
-  filter["list"][0]["wind"] = true;
-  filter["list"][0]["dt_txt"] = true;
-  filter["city"]["name"] = true;
+//static bool docUpdated = false;
+static WiFiClient wifiClient;
+static HttpClient client(wifiClient, host, httpPort);
+static DynamicJsonDocument doc(12288);
 
-  // Deserialize the document
-  
-  return deserializeJson(doc, stream, DeserializationOption::Filter(filter));
-}
+DeserializationError get_json_doc(JsonDocument&, Stream&);
+void requestJson();
+void cleanJson(JsonDocument&);
 
 #endif
 
