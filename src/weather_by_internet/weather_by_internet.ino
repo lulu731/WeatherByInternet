@@ -7,7 +7,7 @@
 #include "w_OTA.h"
 #include <SerialCmd.h>
 
-SerialCmd serCmd(Serial);
+SerialCmd serCmd(Serial, SERIALCMD_LF);
 
 void setup() {
   Serial.begin(115200);

@@ -3,10 +3,10 @@
 
 #include <ArduinoJson.h>
 
-static bool docUpdated = false;
-static DynamicJsonDocument doc(4096);
+extern bool docUpdated;
+extern DynamicJsonDocument doc;
 
-void pullJson(void);
+void pullJson();
 byte getIconIndex(const char*);
 void updateHmi(const DynamicJsonDocument&);
 

@@ -103,10 +103,15 @@ void updateHmi(const DynamicJsonDocument& doc) {
   }
 }
 
-void pullJson(void) {
+void pullJson() {
+  //Serial.println("In pullJson");
+  //delay(30000);
   doc.clear();
   DeserializationError error = deserializeJson(doc, Serial3);
 
+  //Serial.println("deserialized???");
+  //serializeJsonPretty(doc, Serial);
+  
   if (error) {
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
@@ -114,4 +119,5 @@ void pullJson(void) {
   };
   
   docUpdated = true;
+  //Serial.println("docUpdated is true");
 }
