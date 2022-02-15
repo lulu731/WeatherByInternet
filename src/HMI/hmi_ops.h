@@ -4,10 +4,11 @@
 #include <ArduinoJson.h>
 
 static bool docUpdated = false;
+static bool HMIUpdated = false;
 static DynamicJsonDocument doc(4096);
 
-void pullJson(void);
+void pullJson();
 byte getIconIndex(const char*);
-void updateHmi(const DynamicJsonDocument&);
+bool updateHmi(const DynamicJsonDocument&);
 
 #endif

@@ -74,7 +74,7 @@ char* strWind(char* str, int wind) {
 }
 
 
-void updateHmi(const DynamicJsonDocument& doc) {
+bool updateHmi(const DynamicJsonDocument& doc) {
   city.setText(doc["city"]["name"]);
   char str[10];
 
@@ -101,10 +101,12 @@ void updateHmi(const DynamicJsonDocument& doc) {
       }
     }
   }
+  return true;
 }
 
-void pullJson(void) {
+void pullJson() {
   doc.clear();
+  Serial.println("in pull json");
   DeserializationError error = deserializeJson(doc, Serial3);
 
   if (error) {
