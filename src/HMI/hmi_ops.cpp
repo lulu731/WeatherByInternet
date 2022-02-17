@@ -43,7 +43,7 @@ NexObject days[][5] = {day0, day1, day2, day3, day4};
 
 const char* pictures[] = {"01d", "02d", "03d", "04d", "09d", "10d", "11d", "13d", "50d", "01n", "02n", "03n", "04n", "09n", "10n", "11n", "13n", "50n"};
 
-byte getIconIndex(const char* ch) {
+byte GetIconIndex(const char* ch) {
   for (byte index = 0; index < 18; index++) {
     if (strcmp(pictures[index], ch) == 0) {
       return index;
@@ -74,7 +74,7 @@ char* strWind(char* str, int wind) {
 }
 
 
-void updateHmi(const DynamicJsonDocument& doc) {
+void UpdateHmi(const DynamicJsonDocument& doc) {
   city.setText(doc["city"]["name"]);
   char str[10];
 
@@ -84,7 +84,7 @@ void updateHmi(const DynamicJsonDocument& doc) {
   for (JsonArrayConst::iterator it = list.begin(); it != list.end(); ++it) {
     if (it == list.begin()) {
       const char* icon = (*it)["weather"][0]["icon"];
-      weatherIcon.setPic(getIconIndex(icon));
+      weatherIcon.setPic(GetIconIndex(icon));
       temp.setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
       feelTemp.setText(strTemperature(str, ((*it)["main"]["feels_like"]).as<float>()));
       pressure.setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
@@ -92,7 +92,7 @@ void updateHmi(const DynamicJsonDocument& doc) {
     }
     else {
       if (day < 5) {
-        static_cast<NexPicture*>(&(days[day][0]))->setPic(getIconIndex((*it)["weather"][0]["icon"]));
+        static_cast<NexPicture*>(&(days[day][0]))->setPic(GetIconIndex((*it)["weather"][0]["icon"]));
         static_cast<NexText*>(&(days[day][1]))->setText(strTemperature(str, ((*it)["main"]["temp"]).as<float>()));
         static_cast<NexText*>(&(days[day][2]))->setText(strPressure(str, ((*it)["main"]["pressure"]).as<int>()));
         static_cast<NexText*>(&(days[day][3]))->setText(strWind(str, ((*it)["wind"]["speed"]).as<int>()));
@@ -103,15 +103,10 @@ void updateHmi(const DynamicJsonDocument& doc) {
   }
 }
 
-void pullJson() {
-  //Serial.println("In pullJson");
-  //delay(30000);
+void PullJson() {
   doc.clear();
   DeserializationError error = deserializeJson(doc, Serial3);
-
-  //Serial.println("deserialized???");
-  //serializeJsonPretty(doc, Serial);
-  
+ 
   if (error) {
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
@@ -119,5 +114,9 @@ void pullJson() {
   };
   
   docUpdated = true;
-  //Serial.println("docUpdated is true");
+}
+
+void SerialOK() {
+  //Ready to request Json file
+  jsonToRequest = true;
 }

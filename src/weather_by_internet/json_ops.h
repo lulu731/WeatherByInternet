@@ -3,8 +3,8 @@
 
 #include <ArduinoHttpClient.h>
 #include <ESP8266WiFi.h>
-#include "host_data.h"
 #include <ArduinoJson.h>
+#include "host_data.h"
 
 //static bool docUpdated = false;
 static WiFiClient wifiClient;

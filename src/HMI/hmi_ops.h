@@ -5,9 +5,11 @@
 
 extern bool docUpdated;
 extern DynamicJsonDocument doc;
+extern bool jsonToRequest;
 
-void pullJson();
-byte getIconIndex(const char*);
-void updateHmi(const DynamicJsonDocument&);
+void PullJson();
+void SerialOK();
+byte GetIconIndex(const char*);
+void UpdateHmi(const DynamicJsonDocument&);
 
 #endif

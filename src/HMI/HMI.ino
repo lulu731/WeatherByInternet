@@ -2,7 +2,6 @@
 #include <SerialCmd.h>
 #include "hmi_ops.h"
 
-
 SerialCmd serCmd(Serial3, SERIALCMD_LF);
 
 void setup() {
@@ -14,32 +13,27 @@ void setup() {
   while (!Serial3) {
     ;
   }
-  serCmd.AddCmd("PULLJS", SERIALCMD_FROMSERIAL, pullJson);
-  delay(60000);
+  serCmd.AddCmd("SEROK", SERIALCMD_FROMSERIAL, SerialOK);
+  serCmd.AddCmd("PULLJS", SERIALCMD_FROMSERIAL, PullJson);
 };
 
-bool jsonToRequest = true;
+bool jsonToRequest = false;
 bool docUpdated = false;
 DynamicJsonDocument doc(4096);
   
 void loop() {
-  //Serial.print("in loop - ");
-  //Serial.println(docUpdated);
+  serCmd.ReadSer();
+
   if (jsonToRequest) {
-    Serial3.println("REQJSO");
-    //Serial.println("REQJSO sent.");
+    Serial3.print("REQJSO\n");
     jsonToRequest = false;
   }
-  //Serial.println("Waiting for pullJSON");
   
-
   //update screen when JSON doc is updated
   if (docUpdated) {
-    //Serial.println("docUpdated is true");
-    updateHmi(doc);
+    UpdateHmi(doc);
     docUpdated = false;
     jsonToRequest = true;
     delay(120000);//delay for 2 min when updated
   }
-  serCmd.ReadSer();  
 };
