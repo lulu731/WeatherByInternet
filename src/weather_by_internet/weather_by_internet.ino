@@ -1,14 +1,14 @@
 #include <ArduinoHttpClient.h>
 #include <ESP8266WiFi.h>
-#include "secrets.h"
+//#include "secrets.h"
 
 #include <ArduinoJson.h>
+#include <SerialCmd.h>
 #include "json_ops.h"
 #include "w_OTA.h"
-#include <SerialCmd.h>
 #include "sleep.h"
 
-SerialCmd serCmd(Serial);
+SerialCmd serCmd(Serial, SERIALCMD_LF);
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -45,12 +45,11 @@ void setup() {
   otaUpdate();
   serCmd.AddCmd("REQJSO", SERIALCMD_FROMSERIAL, requestJson);
   serCmd.AddCmd("SLEEP", SERIALCMD_FROMSERIAL, goToSleep);
+
+  Serial.print("SEROK\n");
 }
 
 void loop() {
   ArduinoOTA.handle();
-
   serCmd.ReadSer();
-
-  //send json to Arduino
 }

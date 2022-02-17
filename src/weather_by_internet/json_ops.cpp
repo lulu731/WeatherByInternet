@@ -34,7 +34,7 @@ void cleanJson(JsonDocument& doc) {
 
 void requestJson() {
   doc.clear();
-  //docUpdated = false;
+
   //connect to url
   int err = client.get(url);
   delay(500);
@@ -53,6 +53,6 @@ void requestJson() {
   }
 
   cleanJson(doc);
-  Serial.println("PULLJS");
+  Serial.print("PULLJS\n");
   serializeJson(doc, Serial);
 }

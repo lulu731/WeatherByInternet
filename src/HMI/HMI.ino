@@ -4,7 +4,7 @@
 #include "sleep.h"
 
 const int wakeUpPin = 21;
-SerialCmd serCmd(Serial3);
+SerialCmd serCmd(Serial3, SERIALCMD_LF);
 
 void setup() {
   Serial.begin(115200);
@@ -15,34 +15,37 @@ void setup() {
   while (!Serial3) {
     ;
   }
+
   pinMode(wakeUpPin, INPUT);
   //serCmd.AddCmd("SLEEP", SERIALCMD_FROMSERIAL, goToSleep);
-  serCmd.AddCmd("PULLJS", SERIALCMD_FROMSERIAL, pullJson);
-  Serial.println("delay 1mn");
-  delay(60000);
+  serCmd.AddCmd("SEROK", SERIALCMD_FROMSERIAL, SerialOK);
+  serCmd.AddCmd("PULLJS", SERIALCMD_FROMSERIAL, PullJson);
 };
 
-bool jsonToRequest = true;
+bool jsonToRequest = false;
+bool docUpdated = false;
+bool HMIUpdated = false;
+DynamicJsonDocument doc(4096);
+  
 void loop() {
-  if (jsonToRequest) {
-    Serial3.println("REQJSO");
-    Serial.println("request JSON to ESP");
-    jsonToRequest = false;
-  }
   serCmd.ReadSer();
 
+  if (jsonToRequest) {
+    Serial3.print("REQJSO\n");
+    jsonToRequest = false;
+  }
+  
   //update screen when JSON doc is updated
   if (docUpdated) {
-    Serial.println("doc Updated");
-    HMIUpdated = updateHmi(doc);
+    HMIUpdated = UpdateHmi(doc);
     docUpdated = false;
     //delay(120000);//delay for 2 min when updated
   }  
 
-  //send go to sleep signal to ESP and board sleeps
+  //send go to sleep signal to ESP and board sleeps if HMI is updated
   if (HMIUpdated) {
     HMIUpdated = false;
-    Serial3.println("SLEEP"); 
+    Serial3.print("SLEEP\n"); 
     Serial.println("go to sleep");
     goToSleep();
 
@@ -59,7 +62,5 @@ void loop() {
     delay(300);                       
     digitalWrite(LED_BUILTIN, LOW);
     pinMode(LED_BUILTIN, INPUT);
-    
-    jsonToRequest = true;
   }
 };
