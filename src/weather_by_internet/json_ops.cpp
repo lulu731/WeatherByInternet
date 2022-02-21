@@ -1,7 +1,14 @@
-#include "json_ops.h"
 #include <ArduinoJson.h>
+#include <ArduinoHttpClient.h>
+#include <ESP8266WiFi.h>
+#include "json_ops.h"
+#include "host_data.h"
 
-DeserializationError get_json_doc(JsonDocument& doc, Stream& stream) {
+WiFiClient wifiClient;
+HttpClient client(wifiClient, host, httpPort);
+DynamicJsonDocument doc(12288);
+
+DeserializationError GetJsonDoc(JsonDocument& doc, Stream& stream) {
   StaticJsonDocument<512> filter;
   filter["list"][0]["main"]["temp"] = true;
   filter["list"][0]["main"]["feels_like"] = true;
@@ -17,7 +24,7 @@ DeserializationError get_json_doc(JsonDocument& doc, Stream& stream) {
   return deserializeJson(doc, stream, DeserializationOption::Filter(filter));
 };
 
-void cleanJson(JsonDocument& doc) {
+void CleanJson(JsonDocument& doc) {
   //clean json to keep only first weather data and those with time 12:00:00
   JsonArray list = doc["list"];
   byte day = 0;
@@ -32,7 +39,7 @@ void cleanJson(JsonDocument& doc) {
   }
 }
 
-void requestJson() {
+void RequestJson() {
   doc.clear();
 
   //connect to url
@@ -45,14 +52,14 @@ void requestJson() {
   }
 
   //get json from internet
-  DeserializationError error = get_json_doc(doc, client);
+  DeserializationError error = GetJsonDoc(doc, client);
   if (error) {  //todo: how to manage error? => send a command to Arduino
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
     return;
   }
 
-  cleanJson(doc);
+  CleanJson(doc);
   Serial.print("PULLJS\n");
   serializeJson(doc, Serial);
 }

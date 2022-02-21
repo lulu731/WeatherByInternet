@@ -1,5 +1,10 @@
-#include "hmi_ops.h"
 #include <Nextion.h>
+#include "hmi_ops.h"
+
+bool jsonToRequest = false;
+bool docUpdated = false;
+bool HMIUpdated = false;
+DynamicJsonDocument doc(4096);
 
 NexText city = NexText(0, 14, "city");
 
@@ -105,7 +110,7 @@ bool UpdateHmi(const DynamicJsonDocument& doc) {
 
 void PullJson() {
   doc.clear();
-  Serial.println("in pull json");
+  //Serial.println("in pull json");
   DeserializationError error = deserializeJson(doc, Serial3);
  
   if (error) {

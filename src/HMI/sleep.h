@@ -1,13 +1,11 @@
-#include "pins_arduino.h"
-#include "Arduino.h"
 #ifndef __SLEEP_H__
 #define __SLEEP_H__
 
-#include "LowPower.h"
+#include <LowPower.h>
 
 //ISR
 void wakeUp() {
-  detachInterrupt(0);
+  detachInterrupt(2);
 }
 
 void goToSleep() {
@@ -19,8 +17,9 @@ void goToSleep() {
   digitalWrite(LED_BUILTIN, HIGH);
   delay(500);                      
   digitalWrite(LED_BUILTIN, LOW);
+  delay(500); 
   pinMode(LED_BUILTIN, INPUT);
-  attachInterrupt(0, wakeUp, LOW);
+  attachInterrupt(2, wakeUp, LOW);
   LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
 }
 

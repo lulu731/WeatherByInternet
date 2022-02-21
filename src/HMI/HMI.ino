@@ -1,4 +1,3 @@
-#include <ArduinoJson.h>
 #include <SerialCmd.h>
 #include "hmi_ops.h"
 #include "sleep.h"
@@ -16,39 +15,39 @@ void setup() {
     ;
   }
 
+  //wait 5s to ease ESP OTA update
+  delay(5000);
+
   pinMode(wakeUpPin, INPUT);
-  //serCmd.AddCmd("SLEEP", SERIALCMD_FROMSERIAL, goToSleep);
+
   serCmd.AddCmd("SEROK", SERIALCMD_FROMSERIAL, SerialOK);
   serCmd.AddCmd("PULLJS", SERIALCMD_FROMSERIAL, PullJson);
 };
-
-bool jsonToRequest = false;
-bool docUpdated = false;
-bool HMIUpdated = false;
-DynamicJsonDocument doc(4096);
   
 void loop() {
   serCmd.ReadSer();
 
   if (jsonToRequest) {
+    //Serial.println("request JSON");
     Serial3.print("REQJSO\n");
     jsonToRequest = false;
   }
   
   //update screen when JSON doc is updated
   if (docUpdated) {
+    //Serial.println("update HMI");
     HMIUpdated = UpdateHmi(doc);
     docUpdated = false;
-    //delay(120000);//delay for 2 min when updated
   }  
 
   //send go to sleep signal to ESP and board sleeps if HMI is updated
   if (HMIUpdated) {
     HMIUpdated = false;
     Serial3.print("SLEEP\n"); 
-    Serial.println("go to sleep");
+    //Serial.println("");
+    //Serial.println("go to sleep");
     goToSleep();
-
+    //Serial.println("woke up");
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, HIGH);
     delay(300);                       
