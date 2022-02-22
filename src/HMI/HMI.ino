@@ -15,8 +15,8 @@ void setup() {
     ;
   }
 
-  //wait 5s to ease ESP OTA update
-  delay(5000);
+  //wait 10s to ease ESP OTA update
+  delay(10000);
 
   pinMode(wakeUpPin, INPUT);
 
@@ -28,7 +28,6 @@ void loop() {
   serCmd.ReadSer();
 
   if (jsonToRequest) {
-    //Serial.println("request JSON");
     Serial3.print("REQJSO\n");
     jsonToRequest = false;
   }
