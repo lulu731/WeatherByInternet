@@ -14,7 +14,7 @@ void GoToSleep() {
   delay(500);                      
   digitalWrite(LED_BUILTIN, LOW);
   //pinMode(LED_BUILTIN, INPUT);
-  ESP.deepSleep( oneHour - micros());
+  ESP.deepSleep( oneHour );
 }
 
 void WakeUpArduino() {
