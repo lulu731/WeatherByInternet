@@ -1,3 +1,4 @@
+#include "NexConfig.h"
 #include <Nextion.h>
 #include "hmi_ops.h"
 
@@ -110,7 +111,7 @@ bool UpdateHmi(const DynamicJsonDocument& doc) {
 
 void PullJson() {
   doc.clear();
-  //Serial.println("in pull json");
+  dbSerialPrintln("in pull json");
   DeserializationError error = deserializeJson(doc, Serial3);
  
   if (error) {

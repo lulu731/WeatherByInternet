@@ -1,4 +1,5 @@
 #include <SerialCmd.h>
+#include "Nextion.h"
 #include "hmi_ops.h"
 #include "sleep.h"
 
@@ -6,14 +7,24 @@ const int wakeUpPin = 21;
 SerialCmd serCmd(Serial3, SERIALCMD_LF);
 
 void setup() {
-  Serial.begin(115200);
-  while (!Serial) {
+  /*dbSerialBegin(115200);
+  while (!dbSerial) {
     ;
-  }
+  }*/
+  nexInit();
+  dbSerialPrintln("Serial OK");
+
+  /*nexSerial.begin(9600);
+  while (!nexSerial) {
+    ;
+  }*/
+  dbSerialPrintln("Serial1 OK");
+
   Serial3.begin(115200);
   while (!Serial3) {
     ;
   }
+  dbSerialPrintln("Serial3 OK");
 
   //wait 10s to ease ESP OTA update
   delay(10000);
@@ -44,7 +55,7 @@ void loop() {
     HMIUpdated = false;
     Serial3.print("SLEEP\n"); 
     //Serial.println("");
-    //Serial.println("go to sleep");
+    dbSerialPrintln("go to sleep");
     goToSleep();
     //Serial.println("woke up");
     pinMode(LED_BUILTIN, OUTPUT);
