@@ -28,7 +28,7 @@ NexText wind2 = NexText(0, 22, "wind2");
 NexText hum2 = NexText(0, 19, "hum2");
 
 NexPicture w_i3 = NexPicture(0, 8, "w_i3");
-NexText temp3 = NexText(0, 9, "temp1");
+NexText temp3 = NexText(0, 9, "temp3");
 NexText press3 = NexText(0, 11, "press3");
 NexText wind3 = NexText(0, 10, "wind3");
 NexText hum3 = NexText(0, 2, "hum3");
