@@ -60,6 +60,6 @@ void RequestJson() {
   }
 
   CleanJson(doc);
-  Serial.print("PULLJS\n");
-  serializeJson(doc, Serial);
+  //Serial.print("PULLJS\n");
+  //serializeJson(doc, Serial);
 }
