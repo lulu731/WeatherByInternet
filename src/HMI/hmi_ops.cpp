@@ -60,7 +60,7 @@ byte GetIconIndex(const char* ch) {
 
 char* strTemperature(char* str, float temp) {
   dtostrf(temp, 3, 1, str);
-  strcat(str, "°C");
+  strcat(str, "C");
   return str;
 }
 
