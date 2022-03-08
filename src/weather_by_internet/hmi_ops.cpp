@@ -1,11 +1,5 @@
-#include "NexConfig.h"
 #include <Nextion.h>
 #include "hmi_ops.h"
-
-bool jsonToRequest = false;
-bool docUpdated = false;
-bool HMIUpdated = false;
-DynamicJsonDocument doc(4096);
 
 NexText city = NexText(0, 14, "city");
 
@@ -45,7 +39,7 @@ NexObject day2[] = { w_i2, temp2, press2, wind2, hum2 };
 NexObject day3[] = { w_i3, temp3, press3, wind3, hum3 };
 NexObject day4[] = { w_i4, temp4, press4, wind4, hum4 };
 
-NexObject days[][5] = {day0, day1, day2, day3, day4};
+NexObject days[][5] = {day0[5], day1[5], day2[5], day3[5], day4[5]};
 
 const char* pictures[] = {"01d", "02d", "03d", "04d", "09d", "10d", "11d", "13d", "50d", "01n", "02n", "03n", "04n", "09n", "10n", "11n", "13n", "50n"};
 
@@ -79,7 +73,7 @@ char* strWind(char* str, int wind) {
   return str;
 }
 
-bool UpdateHmi(const DynamicJsonDocument& doc) {
+void UpdateHmi(const DynamicJsonDocument& doc) {
   city.setText(doc["city"]["name"]);
   char str[10];
 
@@ -106,24 +100,5 @@ bool UpdateHmi(const DynamicJsonDocument& doc) {
       }
     }
   }
-  return true;
-}
-
-void PullJson() {
-  doc.clear();
-  dbSerialPrintln("in pull json");
-  DeserializationError error = deserializeJson(doc, Serial3);
- 
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
-    return;
-  };
-  
-  docUpdated = true;
-}
-
-void SerialOK() {
-  //Ready to request Json file
-  jsonToRequest = true;
+  //return true;
 }

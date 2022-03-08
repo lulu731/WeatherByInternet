@@ -2,7 +2,6 @@
 #define __SLEEP_H__
 
 const uint64_t oneHour = 3600E6;
-const int arduinoWakeUpPin = 5;
 
 void GoToSleep() {
   //pinMode(LED_BUILTIN, OUTPUT);
@@ -17,10 +16,4 @@ void GoToSleep() {
   ESP.deepSleep( oneHour );
 }
 
-void WakeUpArduino() {
-  pinMode(arduinoWakeUpPin, OUTPUT);
-  digitalWrite(arduinoWakeUpPin, HIGH);
-  delay(500);
-  digitalWrite(arduinoWakeUpPin, LOW);
-}
 #endif

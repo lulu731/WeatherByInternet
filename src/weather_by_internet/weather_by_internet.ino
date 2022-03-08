@@ -10,13 +10,6 @@
 #include "hmi_ops.h"
 
 void setup() {
-  WakeUpArduino();
-  
-  Serial.begin(115200);
-  while (!Serial) {
-    ;
-  }
-
   nexInit();
   dbSerialPrintln("Serial OK");
 
@@ -27,47 +20,20 @@ void setup() {
   }
 
   otaUpdate();
+  //wait for about 25 sec to update sketch
+  for (byte i; i < 250; i++) {
+    ArduinoOTA.handle();
+    delay(100);
+  }
+  
 }
 
 void loop() {
-  ArduinoOTA.handle();
-
-
-
-  if (jsonToRequest) {
-    Serial3.print("REQJSO\n");
-    jsonToRequest = false;
-  }
-  
-  //update screen when JSON doc is updated
-  if (docUpdated) {
-    //Serial.println("update HMI");
-    HMIUpdated = UpdateHmi(doc);
-    docUpdated = false;
-  }  
-
-  //send go to sleep signal to ESP and board sleeps if HMI is updated
-  if (HMIUpdated) {
-    HMIUpdated = false;
-    Serial3.print("SLEEP\n"); 
-    //Serial.println("");
-    dbSerialPrintln("go to sleep");
-    goToSleep();
-    //Serial.println("woke up");
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(300);                       
-    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-    delay(300); 
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(300);                       
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(300); 
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(300);                       
-    digitalWrite(LED_BUILTIN, LOW);
-    pinMode(LED_BUILTIN, INPUT);
-  }
-
-
+  byte cnt = 0;
+  DynamicJsonDocument doc(12288);
+  while (!RequestJson(doc) && cnt < 5) {
+    UpdateHmi(doc);
+    cnt++;
+  };
+  GoToSleep();
 }

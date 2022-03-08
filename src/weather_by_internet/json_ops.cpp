@@ -6,7 +6,7 @@
 
 WiFiClient wifiClient;
 HttpClient client(wifiClient, host, httpPort);
-DynamicJsonDocument doc(12288);
+
 
 DeserializationError GetJsonDoc(JsonDocument& doc, Stream& stream) {
   StaticJsonDocument<512> filter;
@@ -39,9 +39,7 @@ void CleanJson(JsonDocument& doc) {
   }
 }
 
-void RequestJson() {
-  doc.clear();
-
+bool RequestJson(JsonDocument& doc) {
   //connect to url
   int err = client.get(url);
   delay(500);
@@ -49,17 +47,16 @@ void RequestJson() {
   if (err == 0) {
     err = client.responseStatusCode();
     int bodyLen = client.contentLength();
-  }
+  } else return false;
 
   //get json from internet
   DeserializationError error = GetJsonDoc(doc, client);
   if (error) {  //todo: how to manage error? => send a command to Arduino
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
-    return;
+    return false;
   }
 
   CleanJson(doc);
-  //Serial.print("PULLJS\n");
-  //serializeJson(doc, Serial);
+  return true;
 }

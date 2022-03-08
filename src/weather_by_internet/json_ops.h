@@ -4,7 +4,7 @@
 #include <ArduinoJson.h>
 
 DeserializationError GetJsonDoc(JsonDocument&, Stream&);
-void RequestJson();
+bool RequestJson(JsonDocument&);
 void CleanJson(JsonDocument&);
 
 #endif
