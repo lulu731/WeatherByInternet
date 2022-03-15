@@ -4,15 +4,15 @@
 const uint64_t oneHour = 3600E6;
 
 void GoToSleep() {
-  //pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);                       
-  digitalWrite(LED_BUILTIN, LOW);    
-  delay(500); 
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);                      
+  delay(500);
   digitalWrite(LED_BUILTIN, LOW);
-  //pinMode(LED_BUILTIN, INPUT);
+  delay(500);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(500);
+  digitalWrite(LED_BUILTIN, LOW);
+ 
+  dbSerialPrintln("going to sleep");
   ESP.deepSleep( oneHour );
 }
 

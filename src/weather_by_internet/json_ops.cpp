@@ -1,6 +1,7 @@
 #include <ArduinoJson.h>
 #include <ArduinoHttpClient.h>
 #include <ESP8266WiFi.h>
+#include "Nextion.h"
 #include "json_ops.h"
 #include "host_data.h"
 
@@ -52,8 +53,8 @@ bool RequestJson(JsonDocument& doc) {
   //get json from internet
   DeserializationError error = GetJsonDoc(doc, client);
   if (error) {  //todo: how to manage error? => send a command to Arduino
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
+    dbSerialPrintln(F("deserializeJson() failed: "));
+    dbSerialPrintln(error.f_str());
     return false;
   }
 

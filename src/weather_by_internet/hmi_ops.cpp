@@ -54,7 +54,9 @@ byte GetIconIndex(const char* ch) {
 
 char* strTemperature(char* str, float temp) {
   dtostrf(temp, 3, 1, str);
-  strcat(str, "°C");
+  //\xB0 displays degree sign
+  strcat(str, "\xB0");
+  strcat(str, "C");
   return str;
 }
 
@@ -100,5 +102,4 @@ void UpdateHmi(const DynamicJsonDocument& doc) {
       }
     }
   }
-  //return true;
 }
